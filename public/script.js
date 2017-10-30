@@ -4,7 +4,8 @@ let speaker,
   name,
   data,
   socket,
-  id;
+  id,
+  usersDiv;
 
 var allUsers = new Map();
 
@@ -13,7 +14,7 @@ function setup() {
   speaker = new p5.Speech();
   socket = io.connect('http://localhost:3000');
 
-  //CreateP, Input and Button
+  //CreateP, Input and Button and UsersList
   createP("What's your message?");
   inputChat = createInput('');
 
@@ -45,6 +46,7 @@ function setup() {
     var newMap = new Map(JSON.parse(transitString));
     allUsers = newMap;
     console.log(allUsers);
+  //  updateOnlineDiv();
     })
   }//End of Setup
 
@@ -63,8 +65,21 @@ function sendMessage() {
       msg: chatMsg,
       sender: id
     }
-    console.log('sending:' + messageObj.msg);
+    console.log(messageObj.sender + ' is sending:' + messageObj.msg);
     socket.emit('message', messageObj);
     inputChat.value('');
   }
 }
+
+/*//showcase online users
+function updateOnlineDiv(){
+  //let theDiv = document.getElementById("onlineDiv");
+//  theDiv.parentsUntil('div').remove();
+  allUsers.forEach((item, key, mapObj) => {
+    if(!($("#onlineDiv").includes.Key) || $("#onlineDiv")){
+      $("#onlineDiv").append(key);
+    }
+
+  })
+}
+*/
