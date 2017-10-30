@@ -17,8 +17,9 @@ io.sockets.on('connection', (socket) => {
   io.sockets.connected[socket.id].emit('giveID', socket.id);
   users.set(socket.id, '');
   //Give UserMap to new user
-  io.sockets.connected[socket.id].emit('updateUserMap', Array.from(users));
+  io.sockets.emit('updateUserMap', Array.from(users));
 
+  //on disconnect
   socket.on('disconnect', () => {
     console.info(`Client gone [id=${socket.id}]`)
     users.delete(socket.id);
@@ -26,7 +27,11 @@ io.sockets.on('connection', (socket) => {
     io.sockets.emit('updateUserMap', Array.from(users));
   });
 
-  socket.on('message', msgReceived);
+  socket.on('message', (messageObj) => {
+    console.log('broadcasting: ' + messageObj.msg);
+    //socket.broadcast.emit('message', data);
+    io.sockets.emit('printMsg', messageObj); //To All the sockets
+  });
 
   socket.on('usernameSubmit', (newUsername) => {
     users.set(socket.id, newUsername);
@@ -34,10 +39,4 @@ io.sockets.on('connection', (socket) => {
     //io.sockets.emit('updateUserMap', users);
    })
 
-});
-
-function msgReceived(messageObj) {
-  console.log('broadcasting: ' + messageObj.msg);
-  //socket.broadcast.emit('message', data);
-  io.sockets.emit('printMsg', messageObj); //To All the sockets
-}
+})
