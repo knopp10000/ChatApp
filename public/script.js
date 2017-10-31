@@ -46,7 +46,7 @@ function setup() {
     var newMap = new Map(JSON.parse(transitString));
     allUsers = newMap;
     console.log(allUsers);
-  //  updateOnlineDiv();
+    updateOnlineDiv();
     })
   }//End of Setup
 
@@ -71,15 +71,19 @@ function sendMessage() {
   }
 }
 
-/*//showcase online users
+//showcase online users
 function updateOnlineDiv(){
-  //let theDiv = document.getElementById("onlineDiv");
-//  theDiv.parentsUntil('div').remove();
-  allUsers.forEach((item, key, mapObj) => {
-    if(!($("#onlineDiv").includes.Key) || $("#onlineDiv")){
-      $("#onlineDiv").append(key);
-    }
+  $('#onlineDiv').empty();
+  var h2 = createElement('h2','Online Users:');
+  h2.parent('onlineDiv');
 
+  allUsers.forEach((username, userID) => {
+    if(username == ''){
+      userlist = createP(userID);
+    }else{
+      userlist = createP(username);
+    }
+    userlist.parent('onlineDiv');
   })
+
 }
-*/
