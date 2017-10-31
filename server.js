@@ -28,7 +28,7 @@ io.sockets.on('connection', (socket) => {
   });
 
   socket.on('message', (messageObj) => {
-    console.log('broadcasting: ' + messageObj.msg);
+    console.log(messageObj.sender + ' is broadcasting: ' + messageObj.msg);
     //socket.broadcast.emit('message', data);
     io.sockets.emit('printMsg', messageObj); //To All the sockets
   });
