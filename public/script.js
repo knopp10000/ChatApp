@@ -13,11 +13,17 @@ function setup() {
   speaker = new p5.Speech();
   socket = io.connect('http://localhost:3000');
 
-  //CreateP, Input and Button and UsersList
+  //Creates elements with parent 'inputDiv'
+  inputDivObjects = [
+    createP("What's your message?"),
+    inputChat = createInput(''),
+    createP("What's your username?"),
+    inputUsername = createInput(''),
+    button = createButton('submit')
+  ]
+  inputDivObjects.forEach((obj) => {obj.parent('inputDiv')})
 
-  createP("What's your username?");
-  inputUsername = createInput('');
-  button = createButton('submit');
+  //When user presses on button
   button.mousePressed(() => {socket.emit('usernameSubmit', inputUsername.value()); inputUsername.value('')});
 
   //Receive ID
@@ -40,7 +46,7 @@ function setup() {
   socket.on('updateUserMap', (users) => {
     let transitString = JSON.stringify(Array.from(users));
     console.log(transitString);
-    var newMap = new Map(JSON.parse(transitString));
+    let newMap = new Map(JSON.parse(transitString));
     allUsers = newMap;
     console.log(allUsers);
     updateOnlineDiv();
@@ -56,7 +62,7 @@ function keyPressed() {
 }
 //Send Message
 function sendMessage() {
-  let chatMsg = $('#inputChat').val();
+  let chatMsg = inputChat.value();
   if (chatMsg !== '') {
     let messageObj = {
       msg: chatMsg,
@@ -64,7 +70,7 @@ function sendMessage() {
     }
     console.log(messageObj.sender + ' is sending:' + messageObj.msg);
     socket.emit('message', messageObj);
-    $('#inputChat').val('');
+    inputChat.value("");
   }
 }
 
