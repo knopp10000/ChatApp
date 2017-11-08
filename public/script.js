@@ -5,9 +5,8 @@ let speaker,
   data,
   socket,
   id,
-  usersDiv;
-
-var allUsers = new Map();
+  usersDiv,
+  allUsers = new Map();
 
 function setup() {
   noCanvas();
@@ -15,8 +14,6 @@ function setup() {
   socket = io.connect('http://localhost:3000');
 
   //CreateP, Input and Button and UsersList
-  createP("What's your message?");
-  inputChat = createInput('');
 
   createP("What's your username?");
   inputUsername = createInput('');
@@ -59,31 +56,27 @@ function keyPressed() {
 }
 //Send Message
 function sendMessage() {
-  let chatMsg = inputChat.value();
-  if (chatMsg != '') {
+  let chatMsg = $('#inputChat').val();
+  if (chatMsg !== '') {
     let messageObj = {
       msg: chatMsg,
       sender: id
     }
     console.log(messageObj.sender + ' is sending:' + messageObj.msg);
     socket.emit('message', messageObj);
-    inputChat.value('');
+    $('#inputChat').val('');
   }
 }
 
 //showcase online users
 function updateOnlineDiv(){
   $('#onlineDiv').empty();
-  var h2 = createElement('h2','Online Users:');
-  h2.parent('onlineDiv');
+  $('#onlineDiv').append("<h3>Online Users:</h3>")
 
   allUsers.forEach((username, userID) => {
     if(username == ''){
-      userlist = createP(userID);
+        $('#onlineDiv').append(userID + "<br>")
     }else{
-      userlist = createP(username);
-    }
-    userlist.parent('onlineDiv');
-  })
-
+      $('#onlineDiv').append(username + "<br>")
+    }})
 }
